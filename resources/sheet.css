@@ -246,6 +246,109 @@ header > .bottom {
     }
 }
 
+/* Button Border rainbow animations */
+header > .bottom > .actions {
+    /* background-image, clip */
+    #new, #upload, #share {
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+    }
+    #new:hover::before {
+        content: "";
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: -0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        
+        background: padding-box linear-gradient(to right, gold 0, grey 100%),
+                    border-box linear-gradient(in hsl longer hue 90deg, red 0 0);
+        /* background-clip: padding-box, border-box; */
+        background-size: 100%, 400%;
+        border: solid transparent 0.25rem;
+        border-radius: 16px;
+        animation: rainbow 20s linear infinite;
+        z-index: -1;
+    }
+
+    #new::after {
+        content: "";
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-image: linear-gradient(in hsl longer hue 90deg, red 0 0);
+        background-size: 400%;
+        /* background-clip: padding-box; */
+        filter: blur(24px);
+        animation: rainbow 20s linear infinite;
+    }
+
+    /* Masking, allowing gap*/
+    #upload {
+        background-color: transparent;
+    }
+
+    #upload::before {
+        content: "";
+        inset:0;
+        position: absolute;
+        border-radius: inherit;
+        border: 5px transparent solid;
+        padding: 4px;
+        background: padding-box linear-gradient(transparent 0 0), border-box linear-gradient(in hsl longer hue to right, red, red);
+        mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        
+        /* PLEASE PUT bg-size BELOW bg shorthand */
+        background-size: 400%, 400%;
+        animation: rainbow 20s linear infinite forwards;
+    }
+
+    #upload:hover::before {
+        content: "";
+        position: absolute;
+        border-radius: inherit;
+        border: 5px transparent solid;
+        outline: black 2px solid;
+        inset:0;
+        padding: 4px;
+
+        /* Padding background */
+        /* background: padding-box linear-gradient(transparent 0 0), border-box linear-gradient(in hsl longer hue to right, red, red);
+        mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); */
+
+        background:  content-box linear-gradient(90deg, grey, gold),
+                    padding-box linear-gradient(transparent 0 0), 
+                    border-box linear-gradient(in hsl longer hue to right, red, red);
+        mask: linear-gradient(#fff 0 0) content-box,
+                     linear-gradient(#fff 0 0) padding-box, 
+                     linear-gradient(#fff 0 0) border-box;
+        mask-composite: exclude;
+        transition: all 1s;
+        background-size: 400%, 400%;
+
+        z-index: -1;
+
+        animation: rainbow 20s linear infinite forwards;
+
+    }
+
+}
+
+/* Translate gives better performance */
+@keyframes rainbow {
+    0% { background-position: 0 0;}
+    50% { background-position:200% 0;}
+    100% {background-position: 0 0;}
+}
+
 footer {
     grid-area: footer;
     text-align: center;
