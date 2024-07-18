@@ -44,6 +44,8 @@ body {
     grid-template-columns: minmax(250px, max-content) 2fr 1fr;
     grid-template-rows: min-content 1fr 40px;
     height: 100vh;
+    
+    transition: grid-template-columns 1s, width 1s;
 }
 
 nav.dashboard {
@@ -112,7 +114,7 @@ nav.dashboard img, nav.dashboard svg {
 }
 
 nav.dashboard ul img, nav.dashboard ul svg {
-    /* order: -1; */
+    order: -1;
     width: 25px;
     /* fill: hsl(var(--bg-light-color)); */
     filter: invert(95%) sepia(2%) saturate(2841%) hue-rotate(170deg) brightness(93%) contrast(99%);
@@ -159,6 +161,7 @@ nav.dashboard ul li a:hover::before, nav.dashboard ul li a:focus::before {
 
 
 header {
+    /* overflow: hidden; */
     grid-area: header;
     box-shadow: 0 0 5px 1px hsl(var(--accent-color));
 
@@ -310,7 +313,7 @@ header > .bottom > .actions {
         /* PLEASE PUT bg-size BELOW bg shorthand */
         background-size: 400%, 400%;
         animation: rainbow 20s linear infinite forwards;
-        opacity: 0;transition: opacity 1s;
+        opacity: 1;transition: opacity 1s;
     }
 
     #upload:hover::before {
@@ -337,16 +340,89 @@ header > .bottom > .actions {
         background-size: 400%, 400%;
 
         z-index: -1;
-        animation: rainbow 20s linear infinite forwards;
+        animation: rainbow 20s linear infinite;
         
         opacity: 1;
 
     }
 
     /* Rotate bg img but not mask, 
-    1. Mask on parent 2. Rotate on pseudo/child
+    1. Mask on parent 2. Rotate on pseudo/child 
     Text on another element, cause mask will exclude it */
+    #share {
+        /* Overflow on parent, not element!!! */
+        
+        /* overflow: hidden;  */
+        z-index: 1;
 
+    }
+
+    #share i {
+        position: absolute;
+        inset: 0;
+        border: 5px solid transparent;
+        border-radius: inherit;
+        padding: 5px;
+        background-color: #3acfd5;
+        mask: content-box linear-gradient(#fff 0 0 ),
+            padding-box linear-gradient(#fff 0 0),
+              linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        z-index: -1;
+    }
+
+    #share i::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 400%;
+        height: 400%;
+        background: border-box linear-gradient(90deg, yellow 50%, blue 50% ) ;
+    
+        transform: translate(-50%, -50%) rotate(45deg) ;
+        transition: transform 500ms ease;
+    }
+
+    #share:hover i::before {
+        transform:  translate(-50%, -50% ) rotate(315deg);
+    }
+
+    #share i::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(90deg, grey, black , grey ) ;
+        background-size: 200%, 200%;
+        animation: rainbow 20s linear infinite;
+    }
+
+    /* Box shadow filter rainbow */
+    /* Inset and Border same size */
+    #share:after {
+        content:"";
+        position: absolute;
+        inset: -10px;
+        border-radius: inherit;
+        border: 10px solid transparent;
+        background: padding-box linear-gradient(in hsl longer hue 45deg, red, red);
+        background-size: 400% 400%;
+        animation: rainbow 20s linear infinite;
+        z-index: -2;
+
+        mask: content-box linear-gradient(#fff 0 0 ),
+         border-box linear-gradient(#fff 0 0);
+        mask-composite: exclude; 
+
+        /* or radial gradient, which succks too */
+        /* mask: 
+         content-box linear-gradient(#fff 0 0 ),
+         border-box radial-gradient(ellipse at 50% 50%, #fff 0% 50%, transparent 70%);
+        mask-composite: exclude;  */
+        
+        filter: blur(3px);
+    }
 
 }
 
@@ -504,4 +580,40 @@ html .hidden:not(#\9) {
 
 .content {
     grid-area: content;
+}
+
+@media screen and (max-width: 810px) {
+
+
+    div.sidebar {
+        display: none;
+    }
+    
+    body {
+        /* overflow: hidden; */
+        grid-template-areas: "dashboard header "
+                            "dashboard content "
+                            "dashboard footer ";
+        grid-template-columns: minmax(250px, max-content) 2fr;
+        grid-template-rows: auto 1fr 40px;
+        height: calc(100vh - 17px);
+    }
+
+    
+}
+
+@media screen and (max-width: 740px) {
+    body {
+        /* overflow: hidden; */
+        grid-template-columns: minmax(110px,min-content) 2fr;
+    }
+
+    nav.dashboard {
+        position: fixed;
+        height: 100%;
+    }
+
+    nav.dashboard a {
+        font-size: 0;
+    }
 }
